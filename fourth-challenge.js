@@ -11,8 +11,7 @@ const GRID = [
     ["", "^", "", "", "~", "~", "", "", "", ""],
 ];
 
-
-let lightCell = function lightCell(string){
+let isRock = function lightCell(string){
     let columns;
     columns = GRID[0].length;
     let rows;
@@ -24,12 +23,9 @@ let lightCell = function lightCell(string){
     let totalCells = columns * rows;
     let selecColumStr = string[0];
     let selecColumInt = selecColumStr.charCodeAt(0) - 65;
-    let selecRow = Number(string[1]) - 1 ;
-    // The row is given as a 1 based integer, so we shift it back ot 0 based by subtracking 1
-    console.log("Row" + selecRow + " Column" + selecColumInt);
-    answer = GRID[selecRow][selecColumInt] + "";
-    return answer;
+    let selecRow = Number(string[1]) - 1;
+    cellContents = GRID[selecRow][selecColumInt] + "";
+    return cellContents === "^";
 }
 
-
-console.log(lightCell("D1"));
+console.log(isRock('D4'));
