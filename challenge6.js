@@ -17,6 +17,7 @@ let lightRow = function lightRow(int){
     columns = GRID[0].length;
     let rows;
     let i = 0;
+    let cellContents = [];
     while (i < GRID.length) {
         cellContents = GRID[row][column] + "";
         i++;
@@ -24,3 +25,5 @@ let lightRow = function lightRow(int){
     rows = i;
     return cellContents;
 }
+
+console.log(lightRow(6));
