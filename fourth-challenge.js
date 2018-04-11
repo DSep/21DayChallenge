@@ -33,12 +33,10 @@ console.log(isRock('D4'));
 // Improved:
 
 // let isRock = function isRock(string)  {
-//     let columns;
-//     columns = GRID[0].length;
-//     let i = GRID.length;
-//     let rows;
+//     let columns = GRID[0].length;
+//     let rows = GRID.length + 1 - 1;
 //     let cellContents;
-//     rows = i + 1 - 1;
+//
 //     let selecColumStr = string[0];
 //     let selecColumInt = selecColumStr.charCodeAt(0) - 65;
 //     let selecRow = Number(string[1]) - 1;
