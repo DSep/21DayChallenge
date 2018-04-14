@@ -11,7 +11,7 @@ const GRID = [
     ["", "^", "", "", "~", "~", "", "", "", ""],
 ];
 
-let isRock = function isRock(string){
+let isCurrent = function isCurrent(string){
     let columns;
     columns = GRID[0].length;
     let rows;
@@ -25,21 +25,18 @@ let isRock = function isRock(string){
     let selecColumInt = selecColumStr.charCodeAt(0) - 65;
     let selecRow = Number(string[1]) - 1;
     cellContents = GRID[selecRow][selecColumInt] + "";
-    return cellContents === "^";
+    return cellContents === "~";
 }
 
-console.log(isRock('D4'));
+console.log(isCurrent('D4'));
 
-// Improved:
-
-// let isRock = function isRock(string)  {
-//     let columns = GRID[0].length;
-//     let rows = GRID.length + 1 - 1;
-//     let cellContents;
-//
+//Improved
+// let isCurrent = function isCurrent(string){
 //     let selecColumStr = string[0];
 //     let selecColumInt = selecColumStr.charCodeAt(0) - 65;
 //     let selecRow = Number(string[1]) - 1;
 //     cellContents = GRID[selecRow][selecColumInt] + "";
-//     return cellContents === "^";
+//     return cellContents === "~";
 // }
+
+
