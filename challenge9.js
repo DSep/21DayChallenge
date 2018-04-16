@@ -26,3 +26,15 @@ let isSafe = function isSafe(string)  {
 }
 
 console.log(isSafe('D7'));
+
+//Improvement
+//let isSafe = function isSafe(string){
+//     let columns = GRID[0].length;
+//     let rows = GRID.length;
+//
+//     let selecColumStr = string[0];
+//     let selecColumInt = selecColumStr.charCodeAt(0) - 65;
+//     let selecRow = Number(string[1]) - 1;
+//     let cellContents = GRID[selecRow][selecColumInt] + "";
+//     return cellContents !== "~" && cellContents !== "^";
+// }
