@@ -25,7 +25,7 @@ let firstCurrent = function firstCurrent(){
         for(let j = 0; j < columns; j++) {
             // cellContents.push(GRID[k][j] + ""); //copy the array
             cellContent = GRID[k][j] + "";
-            if (cellContent === "^"){
+            if (cellContent === "~"){
                 let row = String(k + 1);
                 let column = String.fromCharCode(65 + j);
                 curPos = (column + "" + row);
