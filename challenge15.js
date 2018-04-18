@@ -13,14 +13,13 @@ const GRID = [
 
 /*
 Rules:
-
 Target cell should not be dangerous.
 Target cell should be 1 cell away in any direction.
 
 Write a function called distressBeacon() that takes a coordinate in the format 'H2' and returns a different
 coordinate in the same format. (Example: distressBeacon('E8') should return 'F7'.)
 
-Additional Instructions:
+Previous Instructions:
 A cell is considered dangerous if there is a rock or a strong current in it, OR in the cells immediately above, below,
 left, or right of it. Write a function called isDangerous() that will take a cell in the format 'G7' and return a true
 or a false value. (Example: isDangerous('E4') would return true, because there is a rock there. Similarly,
@@ -32,6 +31,9 @@ let findSafe = function findSafe(row, column)  {
     let columns = GRID[0].length;
     let rows = GRID.length + 1 - 1;
     let safeCell = "";
+    if (row < 0 || column < 0) {
+        return safeCell;
+    }
 
     //Clockwise from up-right
     //up-right check
@@ -57,8 +59,8 @@ let findSafe = function findSafe(row, column)  {
         return safeCell;
     }
     //down-left check
-    if (column - 1 < columns && row + 1 < rows &&
-        isSafe(row + 1, column - 1)) {
+    if (column - 1 < columns && row + 1 < rows
+        && isSafe(row + 1, column - 1)) {
         safeCell = cellNumToStr(row + 1, column - 1);
         return safeCell;
     }
@@ -82,15 +84,29 @@ let findSafe = function findSafe(row, column)  {
     return safeCell;
 };
 
+let isSafeCell = function isSafeCell(row, column) {
+    if (row >= (GRID.length + 1 - 1) || row < 0) {
+        return false;
+    }
+    if (column >= (GRID[0].length) || column < 0) {
+        return false;
+    }
+    let cellContents = GRID[row][column] + "";
+    return cellContents !== "~" && cellContents !== "^";
+};
+
 //Helper function to check if a given cell (string) and the cells
 // touching it or diagonal from it are safe
-//REQUIRES: Cell identification, as a string, with column letter then
-// row number.
+//REQUIRES: Cell row & column integer
 //EFFECTS: Checks whether the cell or surroundings have a rock or
 // strong current
-let isSafe = function isSafe(row, column)  {
+let isSafe = function isSafe(row, column)  { //TODO: abstract the conditionals, also need a check that the row & column are greater than zero
     let columns = GRID[0].length;
     let rows = GRID.length + 1 - 1;
+    //Error check
+    if (row < 0 || column < 0) {
+        return false;
+    }
 
     //left check
     if (column - 1 < columns && !isSafeCell(row, column - 1))
@@ -105,29 +121,24 @@ let isSafe = function isSafe(row, column)  {
     if (row + 1 < rows && !isSafeCell(row + 1, column))
         return false;
 
-    // //up-left check
-    // if (column - 1 < columns && row - 1 < rows &&
-    //     !isSafeCell(row - 1, column - 1))
-    //     return false;
-    // //up-right check
-    // if (column + 1 < columns && row - 1 < rows &&
-    //     !isSafeCell(row - 1, column + 1))
-    //     return false;
-    // //down-right check
-    // if (column + 1 < columns && row + 1 < rows &&
-    //     !isSafeCell(row + 1, column + 1))
-    //     return false;
-    // //down-left check
-    // if (column - 1 < columns && row + 1 < rows &&
-    //     !isSafeCell(row + 1, column - 1))
-    //     return false;
+    //up-left check
+    if (column - 1 < columns && row - 1 < rows &&
+        !isSafeCell(row - 1, column - 1))
+        return false;
+    //up-right check
+    if (column + 1 < columns && row - 1 < rows &&
+        !isSafeCell(row - 1, column + 1))
+        return false;
+    //down-right check
+    if (column + 1 < columns && row + 1 < rows &&
+        !isSafeCell(row + 1, column + 1))
+        return false;
+    //down-left check
+    if (column - 1 < columns && row + 1 < rows &&
+        !isSafeCell(row + 1, column - 1))
+        return false;
 
     return isSafeCell(row, column); //itself
-};
-
-let isSafeCell = function isSafeCell(row, column) {
-    let cellContents = GRID[row][column] + "";
-    return cellContents !== "~" && cellContents !== "^";
 };
 
 
@@ -136,14 +147,14 @@ let isSafeCell = function isSafeCell(row, column) {
 let cellRowToInt = function cellRowToInt(string){
     let selecRow = Number(string[1]) - 1;
     return selecRow;
-}
+};
 
 //Convert the Column of given string position to integer
 let cellColumnToInt = function cellColumnToInt(string){
     let selecColumStr = string[0];
     let selecColumInt = selecColumStr.charCodeAt(0) - 65;
     return selecColumInt;
-}
+};
 
 //Convert Integer RowColumn position to string
 let cellNumToStr = function cellNumToStr(rowInt, columnInt){
@@ -151,16 +162,19 @@ let cellNumToStr = function cellNumToStr(rowInt, columnInt){
     let column = String.fromCharCode(65 + columnInt);
     let curPos = (column + "" + row);
     return curPos;
-}
+};
 
 let distressBeacon = function distressBeacon(string) {
     // console.log('begin distress beacon');
     let row = cellRowToInt(string);
     // console.log('row: ' + row);
     let column = cellColumnToInt(string);
-    // console.log('column: ' + column);
+    console.log('column: ' + (column + 1));
     let targetCell = findSafe(row, column);
     return targetCell;
 };
 
 console.log(distressBeacon('E8')); //'F7'
+console.log(distressBeacon('G3'));
+console.log(distressBeacon('E1'));
+
