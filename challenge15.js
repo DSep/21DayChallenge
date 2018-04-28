@@ -104,11 +104,12 @@ let isSafe = function isSafe(row, column)  { //TODO: abstract the conditionals, 
     let columns = GRID[0].length;
     let rows = GRID.length + 1 - 1;
     //Error check
-    if (row < 0 || column < 0) {
+    if (checkBounds(row, column)) {
         return false;
     }
 
     //left check
+
     if (column - 1 < columns && !isSafeCell(row, column - 1))
         return false;
     //right check
@@ -141,7 +142,15 @@ let isSafe = function isSafe(row, column)  { //TODO: abstract the conditionals, 
     return isSafeCell(row, column); //itself
 };
 
+let checkBounds = function checkBounds(row, column) {
+    let columns = GRID[0].length;
+    let rows = GRID.length + 1 - 1;
 
+    let columnBad = (column < 0 || column >= columns);
+    let rowBad = (row < 0 || row >= rows);
+
+    return columnBad || rowBad;
+}
 
 //Convert the Row of given string position to integer
 let cellRowToInt = function cellRowToInt(string){
@@ -155,6 +164,8 @@ let cellColumnToInt = function cellColumnToInt(string){
     let selecColumInt = selecColumStr.charCodeAt(0) - 65;
     return selecColumInt;
 };
+
+
 
 //Convert Integer RowColumn position to string
 let cellNumToStr = function cellNumToStr(rowInt, columnInt){
