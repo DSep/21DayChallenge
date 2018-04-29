@@ -27,80 +27,20 @@ isDangerous('B9') would return true, because there are rocks and currents AROUND
 would return false because it is open water.)
  */
 
-let findSafe = function findSafe(row, column)  {
-    let columns = GRID[0].length;
-    let rows = GRID.length + 1 - 1;
-    let safeCell = "";
-    if (row < 0 || column < 0) {
-        return safeCell;
-    }
-
-    //Clockwise from up-right
-    //up-right check
-    if (column + 1 < columns && row - 1 < rows &&
-        isSafe(row - 1, column + 1)) {
-        safeCell = cellNumToStr(row - 1, column + 1);
-        return safeCell;
-    }
-    //right check
-    if (column + 1 < columns && isSafe(row, column + 1)) {
-        safeCell = cellNumToStr(row, column + 1);
-        return safeCell;
-    }
-    //down-right check
-    if (column + 1 < columns && row + 1 < rows &&
-        isSafe(row + 1, column + 1)) {
-        safeCell = cellNumToStr(row + 1, column + 1);
-        return safeCell;
-    }
-    //down check
-    if (row + 1 < rows && isSafe(row + 1, column)) {
-        safeCell = cellNumToStr(row + 1, column);
-        return safeCell;
-    }
-    //down-left check
-    if (column - 1 < columns && row + 1 < rows
-        && isSafe(row + 1, column - 1)) {
-        safeCell = cellNumToStr(row + 1, column - 1);
-        return safeCell;
-    }
-    //left check
-    if (column - 1 < columns && isSafe(row, column - 1)) {
-        safeCell = cellNumToStr(row, column - 1);
-        return safeCell;
-    }
-    //up-left check
-    if (column - 1 < columns && row - 1 < rows &&
-        isSafe(row - 1, column - 1)) {
-        safeCell = cellNumToStr(row - 1, column - 1);
-        return safeCell;
-    }
-    //up check
-    if (row - 1 < rows && isSafeCell(row - 1, column)) {
-        safeCell = cellNumToStr(row - 1, column);
-        return safeCell;
-    }
-
-    return safeCell;
-};
-
 let isSafeCell = function isSafeCell(row, column) {
-    if (row >= (GRID.length + 1 - 1) || row < 0) {
-        return false;
-    }
-    if (column >= (GRID[0].length) || column < 0) {
+    if (!checkBounds(row, column)) {
         return false;
     }
     let cellContents = GRID[row][column] + "";
     return cellContents !== "~" && cellContents !== "^";
 };
 
-//Helper function to check if a given cell (string) and the cells
+//Helper function to check if a given cell  and the cells
 // touching it or diagonal from it are safe
 //REQUIRES: Cell row & column integer
 //EFFECTS: Checks whether the cell or surroundings have a rock or
 // strong current
-let isSafe = function isSafe(row, column)  { //TODO: abstract the conditionals, also need a check that the row & column are greater than zero
+let isSafe = function isSafe(row, column) { //TODO: abstract the conditionals, also need a check that the row & column are greater than zero
     let columns = GRID[0].length;
     let rows = GRID.length + 1 - 1;
     //Error check
@@ -109,47 +49,57 @@ let isSafe = function isSafe(row, column)  { //TODO: abstract the conditionals, 
     }
 
     //left check
-
-    if (column - 1 < columns && !isSafeCell(row, column - 1))
-        return false;
+    if (checkBounds(row, column - 1)) {
+        if (!isSafeCell(row, column - 1))
+            return false;
+    }
     //right check
-    if (column + 1 < columns && !isSafeCell(row, column - 1))
-        return false;
+    if (checkBounds(row, column + 1)) {
+        if (!isSafeCell(row, column + 1))
+            return false;
+    }
     //up check
-    if (row - 1 < rows && !isSafeCell(row - 1, column))
-        return false;
+    if (checkBounds(row - 1, column)) {
+        if (!isSafeCell(row - 1, column))
+            return false;
+    }
     //down check
-    if (row + 1 < rows && !isSafeCell(row + 1, column))
-        return false;
-
+    if (checkBounds(row + 1, column)) {
+        if (!isSafeCell(row + 1, column))
+            return false;
+    }
     //up-left check
-    if (column - 1 < columns && row - 1 < rows &&
-        !isSafeCell(row - 1, column - 1))
-        return false;
+    if (checkBounds(row - 1, column - 1)) {
+        if (!isSafeCell(row - 1, column - 1))
+            return false;
+    }
     //up-right check
-    if (column + 1 < columns && row - 1 < rows &&
-        !isSafeCell(row - 1, column + 1))
-        return false;
+    if (checkBounds(row - 1, column + 1)) {
+        if (!isSafeCell(row - 1, column + 1))
+            return false;
+    }
     //down-right check
-    if (column + 1 < columns && row + 1 < rows &&
-        !isSafeCell(row + 1, column + 1))
-        return false;
+    if (checkBounds(row + 1, column + 1)) {
+        if (!isSafeCell(row + 1, column + 1))
+            return false;
+    }
     //down-left check
-    if (column - 1 < columns && row + 1 < rows &&
-        !isSafeCell(row + 1, column - 1))
-        return false;
+    if (checkBounds(row + 1, column - 1)) {
+        if (!isSafeCell(row + 1, column - 1))
+            return false;
+    }
 
     return isSafeCell(row, column); //itself
 };
 
-let checkBounds = function checkBounds(row, column) {
+let checkBounds = function checkBounds(row, column) { // true if inside bounds
     let columns = GRID[0].length;
     let rows = GRID.length + 1 - 1;
 
-    let columnBad = (column < 0 || column >= columns);
-    let rowBad = (row < 0 || row >= rows);
+    let columnGood = (column >= 0 || column < columns);
+    let rowGood = (row >= 0 || row < rows);
 
-    return columnBad || rowBad;
+    return columnGood && rowGood;
 }
 
 //Convert the Row of given string position to integer
@@ -165,8 +115,6 @@ let cellColumnToInt = function cellColumnToInt(string){
     return selecColumInt;
 };
 
-
-
 //Convert Integer RowColumn position to string
 let cellNumToStr = function cellNumToStr(rowInt, columnInt){
     let row = String(rowInt + 1);
@@ -175,10 +123,58 @@ let cellNumToStr = function cellNumToStr(rowInt, columnInt){
     return curPos;
 };
 
+let findSafe = function findSafe(row, column)  {
+    let safeCell = "none";
+
+    //Clockwise from up-right
+    //up-right check
+    if (checkBounds(row - 1, column + 1) && isSafe(row - 1, column + 1)) {
+        safeCell = cellNumToStr(row - 1, column + 1);
+        return safeCell;
+    }
+    //right check
+    if (checkBounds(row, column + 1) && isSafe(row, column + 1)) {
+        safeCell = cellNumToStr(row, column + 1);
+        return safeCell;
+    }
+    //down-right check
+    if (checkBounds(row + 1, column + 1) && isSafe(row + 1, column + 1)) {
+        safeCell = cellNumToStr(row + 1, column + 1);
+        return safeCell;
+    }
+    //down check
+    if (checkBounds(row + 1, column) && isSafe(row + 1, column)) {
+        safeCell = cellNumToStr(row + 1, column);
+        return safeCell;
+    }
+    //down-left check
+    if (checkBounds(row + 1, column - 1) && isSafe(row + 1, column - 1)) {
+        safeCell = cellNumToStr(row + 1, column - 1);
+        return safeCell;
+    }
+    //left check
+    if (checkBounds(row, column - 1) && isSafe(row, column - 1)) {
+        safeCell = cellNumToStr(row, column - 1);
+        return safeCell;
+    }
+    //up-left check
+    if (checkBounds(row - 1, column - 1) && isSafe(row - 1, column - 1)) {
+        safeCell = cellNumToStr(row - 1, column - 1);
+        return safeCell;
+    }
+    //up check
+    if (checkBounds(row - 1, column) && isSafe(row - 1, column)) {
+        safeCell = cellNumToStr(row - 1, column);
+        return safeCell;
+    }
+
+    return safeCell;
+};
+
 let distressBeacon = function distressBeacon(string) {
-    // console.log('begin distress beacon');
+    console.log('begin distress beacon');
     let row = cellRowToInt(string);
-    // console.log('row: ' + row);
+    console.log('row: ' + row);
     let column = cellColumnToInt(string);
     console.log('column: ' + (column + 1));
     let targetCell = findSafe(row, column);
