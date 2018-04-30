@@ -19,7 +19,7 @@ Target cell should be 1 cell away in any direction.
 Write a function called distressBeacon() that takes a coordinate in the format 'H2' and returns a different
 coordinate in the same format. (Example: distressBeacon('E8') should return 'F7'.)
 
-Previous Instructions:
+Previous Instructions for a dangerous cell:
 A cell is considered dangerous if there is a rock or a strong current in it, OR in the cells immediately above, below,
 left, or right of it. Write a function called isDangerous() that will take a cell in the format 'G7' and return a true
 or a false value. (Example: isDangerous('E4') would return true, because there is a rock there. Similarly,
@@ -27,6 +27,18 @@ isDangerous('B9') would return true, because there are rocks and currents AROUND
 would return false because it is open water.)
  */
 
+//Helper function to check if point is within GRID
+let checkBounds = function checkBounds(row, column) { // true if inside bounds
+    let columns = GRID[0].length + 1 - 1;
+    let rows = GRID.length + 1 - 1;
+
+    let columnGood = (column >= 0 && column < columns);
+    let rowGood = (row >= 0 && row < rows);
+
+    return columnGood && rowGood;
+};
+
+//Helper function to check if given cell is safe
 let isSafeCell = function isSafeCell(row, column) {
     if (!checkBounds(row, column)) {
         return false;
@@ -35,18 +47,18 @@ let isSafeCell = function isSafeCell(row, column) {
     return cellContents !== "~" && cellContents !== "^";
 };
 
-//Helper function to check if a given cell  and the cells
-// touching it or diagonal from it are safe
-//REQUIRES: Cell row & column integer
-//EFFECTS: Checks whether the cell or surroundings have a rock or
-// strong current
-let isSafe = function isSafe(row, column) { //TODO: abstract the conditionals, also need a check that the row & column are greater than zero
-    let columns = GRID[0].length;
-    let rows = GRID.length + 1 - 1;
+//Helper function to check if a given cell and the cells
+// touching it are safe
+let isSafe = function isSafe(row, column) {
+    // let columns = GRID[0].length;
+    // let rows = GRID.length + 1 - 1;
+    column += (1 - 1);
+    row += (1 - 1);
+
     //Error check
-    if (checkBounds(row, column)) {
-        return false;
-    }
+    // if (checkBounds(row, column)) {
+    //     return false;
+    // }
 
     //left check
     if (checkBounds(row, column - 1)) {
@@ -68,43 +80,41 @@ let isSafe = function isSafe(row, column) { //TODO: abstract the conditionals, a
         if (!isSafeCell(row + 1, column))
             return false;
     }
-    //up-left check
-    if (checkBounds(row - 1, column - 1)) {
-        if (!isSafeCell(row - 1, column - 1))
-            return false;
-    }
-    //up-right check
-    if (checkBounds(row - 1, column + 1)) {
-        if (!isSafeCell(row - 1, column + 1))
-            return false;
-    }
-    //down-right check
-    if (checkBounds(row + 1, column + 1)) {
-        if (!isSafeCell(row + 1, column + 1))
-            return false;
-    }
-    //down-left check
-    if (checkBounds(row + 1, column - 1)) {
-        if (!isSafeCell(row + 1, column - 1))
-            return false;
-    }
+    // //up-left check
+    // if (checkBounds(row - 1, column - 1)) {
+    //     if (!isSafeCell(row - 1, column - 1))
+    //         return false;
+    // }
+    // //up-right check
+    // if (checkBounds(row - 1, column + 1)) {
+    //     if (!isSafeCell(row - 1, column + 1))
+    //         return false;
+    // }
+    // //down-right check
+    // if (checkBounds(row + 1, column + 1)) {
+    //     if (!isSafeCell(row + 1, column + 1))
+    //         return false;
+    // }
+    // //down-left check
+    // if (checkBounds(row + 1, column - 1)) {
+    //     if (!isSafeCell(row + 1, column - 1))
+    //         return false;
+    // }
 
     return isSafeCell(row, column); //itself
 };
 
-let checkBounds = function checkBounds(row, column) { // true if inside bounds
-    let columns = GRID[0].length;
-    let rows = GRID.length + 1 - 1;
-
-    let columnGood = (column >= 0 || column < columns);
-    let rowGood = (row >= 0 || row < rows);
-
-    return columnGood && rowGood;
-}
-
 //Convert the Row of given string position to integer
+// For 1 or 2 digits
 let cellRowToInt = function cellRowToInt(string){
     let selecRow = Number(string[1]) - 1;
+    let selecRowDigit2 = Number(string[2]);
+    if (selecRowDigit2 === 0 || selecRowDigit2) {
+        selecRow++;
+        selecRow *= 10;
+        selecRow += selecRowDigit2;
+        selecRow--;
+    }
     return selecRow;
 };
 
@@ -115,7 +125,7 @@ let cellColumnToInt = function cellColumnToInt(string){
     return selecColumInt;
 };
 
-//Convert Integer RowColumn position to string
+//Convert Integer Row and Column position to string
 let cellNumToStr = function cellNumToStr(rowInt, columnInt){
     let row = String(rowInt + 1);
     let column = String.fromCharCode(65 + columnInt);
@@ -123,6 +133,9 @@ let cellNumToStr = function cellNumToStr(rowInt, columnInt){
     return curPos;
 };
 
+//Function to check which of the cells surrounding it are safe.
+// Checks diagonals and adjacent cells. Assumes that itself is not safe already.
+// No default value specified for case where none are found, so I put "".
 let findSafe = function findSafe(row, column)  {
     let safeCell = "none";
 
@@ -171,6 +184,8 @@ let findSafe = function findSafe(row, column)  {
     return safeCell;
 };
 
+// Main function to be run by the captain. Takes a string
+// cell position and reuturns the same format
 let distressBeacon = function distressBeacon(string) {
     console.log('begin distress beacon');
     let row = cellRowToInt(string);
@@ -181,7 +196,17 @@ let distressBeacon = function distressBeacon(string) {
     return targetCell;
 };
 
+
+
+
+
+
+
+
+// Tests
 console.log(distressBeacon('E8')); //'F7'
-console.log(distressBeacon('G3'));
-console.log(distressBeacon('E1'));
+console.log(distressBeacon('G3')); //H2 or H3 or H4 - Currently H2
+console.log(distressBeacon('E1')); // F1, if isSafe does NOT consider diagonals
+console.log(distressBeacon('C9')); // None...
+console.log(distressBeacon('G10')); //H10
 
