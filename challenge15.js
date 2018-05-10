@@ -12,9 +12,11 @@ const GRID = [
 ];
 
 /*
+
+You need to look at all the cells beside, above, and below the ship and decide which cell is the best one for them to go to.
 Rules:
-Target cell should not be dangerous.
-Target cell should be 1 cell away in any direction.
+    Target cell should not be dangerous.
+    Target cell should be adjacent to the given coordinates (beside, above or below).
 
 Write a function called distressBeacon() that takes a coordinate in the format 'H2' and returns a different
 coordinate in the same format. (Example: distressBeacon('E8') should return 'F7'.)
@@ -140,41 +142,41 @@ let findSafe = function findSafe(row, column)  {
     let safeCell = "none";
 
     //Clockwise from up-right
-    //up-right check
-    if (checkBounds(row - 1, column + 1) && isSafe(row - 1, column + 1)) {
-        safeCell = cellNumToStr(row - 1, column + 1);
-        return safeCell;
-    }
+    // //up-right check
+    // if (checkBounds(row - 1, column + 1) && isSafe(row - 1, column + 1)) {
+    //     safeCell = cellNumToStr(row - 1, column + 1);
+    //     return safeCell;
+    // }
     //right check
     if (checkBounds(row, column + 1) && isSafe(row, column + 1)) {
         safeCell = cellNumToStr(row, column + 1);
         return safeCell;
     }
-    //down-right check
-    if (checkBounds(row + 1, column + 1) && isSafe(row + 1, column + 1)) {
-        safeCell = cellNumToStr(row + 1, column + 1);
-        return safeCell;
-    }
+    // //down-right check
+    // if (checkBounds(row + 1, column + 1) && isSafe(row + 1, column + 1)) {
+    //     safeCell = cellNumToStr(row + 1, column + 1);
+    //     return safeCell;
+    // }
     //down check
     if (checkBounds(row + 1, column) && isSafe(row + 1, column)) {
         safeCell = cellNumToStr(row + 1, column);
         return safeCell;
     }
-    //down-left check
-    if (checkBounds(row + 1, column - 1) && isSafe(row + 1, column - 1)) {
-        safeCell = cellNumToStr(row + 1, column - 1);
-        return safeCell;
-    }
+    // //down-left check
+    // if (checkBounds(row + 1, column - 1) && isSafe(row + 1, column - 1)) {
+    //     safeCell = cellNumToStr(row + 1, column - 1);
+    //     return safeCell;
+    // }
     //left check
     if (checkBounds(row, column - 1) && isSafe(row, column - 1)) {
         safeCell = cellNumToStr(row, column - 1);
         return safeCell;
     }
-    //up-left check
-    if (checkBounds(row - 1, column - 1) && isSafe(row - 1, column - 1)) {
-        safeCell = cellNumToStr(row - 1, column - 1);
-        return safeCell;
-    }
+    // //up-left check
+    // if (checkBounds(row - 1, column - 1) && isSafe(row - 1, column - 1)) {
+    //     safeCell = cellNumToStr(row - 1, column - 1);
+    //     return safeCell;
+    // }
     //up check
     if (checkBounds(row - 1, column) && isSafe(row - 1, column)) {
         safeCell = cellNumToStr(row - 1, column);
@@ -204,9 +206,9 @@ let distressBeacon = function distressBeacon(string) {
 
 
 // Tests
-console.log(distressBeacon('E8')); //'F7'
-console.log(distressBeacon('G3')); //H2 or H3 or H4 - Currently H2
-console.log(distressBeacon('E1')); // F1, if isSafe does NOT consider diagonals
-console.log(distressBeacon('C9')); // None...
-console.log(distressBeacon('G10')); //H10
+// console.log(distressBeacon('E8')); //'F8'
+// console.log(distressBeacon('G3')); //H2 or H3 or H4 - Currently H2
+// console.log(distressBeacon('E1')); // F1, if isSafe does NOT consider diagonals
+// console.log(distressBeacon('C9')); // None...
+// console.log(distressBeacon('G10')); //H10
 
