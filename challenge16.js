@@ -33,26 +33,25 @@ let cellColumnToInt = function cellColumnToInt(string){
     return selecColumInt;
 };
 
+let lightCell = function lightCell(string){
+    let columns = GRID[0].length + 1-1;
+    let rows = GRID.length+1-1;
+    let cellContents;
 
-// Main function to be run by the captain. Takes a string
-// cell position and reuturns the same format
-let addRock = function addRock(string) {
-    console.log('begin adding rock');
-    let row = cellRowToInt(string);
-    console.log('row: ' + row);
-    let column = cellColumnToInt(string);
-    console.log('column: ' + (column + 1));
-    GRID[row][column] = "^";
+    let selecColumInt = cellColumnToInt(string);
+    let selecRow = cellRowToInt(string);
+
+    if (selecRow >= rows || selecColumInt >= columns) {
+        return false;
+    }
+    cellContents = GRID[selecRow][selecColumInt] + "";
+    return cellContents;
 };
 
-// addRock("J9");
+// Solution
+GRID[8][9] = "^";
 
-// Manual solution
+//Other solution
+// GRID[8].splice(9,1, "^");
 
-console.log(GRID);
-
-GRID[row][column] = "^" + "";
-
-GRID[8].splice(9,1, "^");
-
-console.log(GRID);
+// console.log(GRID);
