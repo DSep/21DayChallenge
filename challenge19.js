@@ -75,12 +75,34 @@ let safetyReport = function safetyReport(){
     console.log(openWater3);
 
 
-    var resultingPercentage = +((openWater / gridSize * 100).toFixed(2));
+    var resultingPercentage = +((openWater / gridSize * 100).toFixed(1)); //Only 1 digit needed
     // if (resultingPercentage < 10) {
     //     return "0" + resultingPercentage + "%";
     // }
 
     return resultingPercentage + "%";
 };
+
+// Final code used:
+// let safetyReport = function safetyReport(){
+//     //Challenge 16:
+//     GRID[8][9] = "^";
+//
+//     let gridSize2 = 0;
+//     let openWater2 = GRID.reduce(function(accumulator, currentValue, currentIndex) {
+//         return accumulator + GRID[currentIndex].reduce(function(accumulator, currentValue, currentIndex2) {
+//             gridSize2++;
+//             if (GRID[currentIndex][currentIndex2] === "") {
+//                 return accumulator + 1;
+//             } else {
+//                 return accumulator;
+//             }
+//         }, 0);
+//     }, 0);
+//
+//     var resultingPercentage = +((openWater2 / gridSize2 * 100).toFixed(1));
+//     return resultingPercentage + "%";
+// };
+
 
 console.log(safetyReport());
